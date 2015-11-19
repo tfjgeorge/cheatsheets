@@ -121,6 +121,25 @@ Regression & mean of the target value of the k nearest neighbors\\
 Multiclass classification & $\argmax(f(onehot))$
 \end{tabular}
 
+\section{Decision trees}
+All trees can be represented as binary trees.
+
+\textbf{Construction rule for nodes} : greedily maximize impurity decrease:
+$$\Delta i(N) = i(N) - \mu^{(g)} i(N^{(g)}) - (1 - \mu^{(g)}) i (N^{(d)})$$
+
+\textbf{Class frequencies} $\mu_j = \frac{\#\{class = C_j\}}{n}$
+
+\begin{tabular}{@{}p{\the\MyLen}%
+                @{}p{\linewidth-\the\MyLen}@{}}
+Entropy & $i(N) = -\sum_j \mu_j \log(\mu_j)$\\
+Variance & $i(N) = \mu_1 \mu_2$ (binary)\\
+Gini & $i(N) = \sum_{i \neq j} \mu_i \mu_j$\\
+Bad classification & $i(N)=1 - \max_j(\mu_j)$
+
+
+\end{tabular}
+
+For efficiency purpose, first sort all training samples given all input dimensions
 
 \end{multicols}
 \end{document}
