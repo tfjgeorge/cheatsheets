@@ -126,10 +126,10 @@ Multiclass classification & $\argmax(f(onehot))$
 \section{Decision trees}
 All trees can be represented as binary trees.
 
+\textbf{Class frequencies} $\mu_j = \frac{\#\{class = C_j\}}{n}$
+
 \textbf{Construction rule for nodes} : greedily maximize impurity decrease:
 $$\Delta i(N) = i(N) - \mu^{(g)} i(N^{(g)}) - (1 - \mu^{(g)}) i (N^{(d)})$$
-
-\textbf{Class frequencies} $\mu_j = \frac{\#\{class = C_j\}}{n}$
 
 \begin{tabular}{@{}p{\the\MyLen}%
                 @{}p{\linewidth-\the\MyLen}@{}}
@@ -141,7 +141,30 @@ Bad classification & $i(N)=1 - \max_j(\mu_j)$
 
 \end{tabular}
 
-For efficiency purpose, first sort all training samples given all input dimensions
+For efficiency purpose, first sort all training samples given all input dimensions. Construction in $O(dn \log(n))$
+
+\textbf{Oblique decision tree} : Use a linear discriminant function instead.
+
+\section{Ensemble methods}
+
+\subsection{Bagging}
+
+\textbf{Bootstrap} : Sample $T$ times $m$ elements from the training set $\mathcal{D}_t$.
+
+Construct a predictor on each set $h_t = A(\mathcal{D}_t)$. The resulting predictor consists in averaging all predictors:
+$$f(x) = \frac{1}{T} \sum_{t=1}^T h_t(x)$$
+
+\subsection{Boosting}
+
+\begin{enumerate}
+\item Learn a predictor $h_n$
+\item Learn a predictor $h_{n+1}$ focusing on training examples misclassified by $h_n$
+\item Combine $h_{n+1}$ with all $h_i, i<n$
+\end{enumerate}
+
+$$f(x) = \sum_{t=1}^T \alpha_t h_t(x) \, , \alpha_t > 0$$
+
+\textbf{Weighted classification error} $A(\mathcal{D}, D) = \arg \min_{h \in \mathcal{H}} \sum_{i=1}^m D(i) I_{\{h(x_i) \neq y_i\}}$
 
 \end{multicols}
 \end{document}
