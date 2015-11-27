@@ -166,5 +166,18 @@ $$f(x) = \sum_{t=1}^T \alpha_t h_t(x) \, , \alpha_t > 0$$
 
 \textbf{Weighted classification error} $A(\mathcal{D}, D) = \arg \min_{h \in \mathcal{H}} \sum_{i=1}^m D(i) I_{\{h(x_i) \neq y_i\}}$
 
+\section{Clustering}
+
+Partition a set of examples with no labels into $n$ regions.
+
+\subsection{K-means}
+
+Each point is assigned a cluster that is given by the closest of the $K$ mean points $\mu_i$ by repeating:
+\begin{itemize}
+\item For each point, assign a cluster by finding the closest $\mu_i$
+\item Replace $\mu_i$ with the mean of the points in the cluster $i$
+\end{itemize}
+
+
 \end{multicols}
 \end{document}
