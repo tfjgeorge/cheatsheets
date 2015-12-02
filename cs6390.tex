@@ -175,9 +175,30 @@ Partition a set of examples with no labels into $n$ regions.
 Each point is assigned a cluster that is given by the closest of the $K$ mean points $\mu_i$ by repeating:
 \begin{itemize}
 \item For each point, assign a cluster by finding the closest $\mu_i$
-\item Replace $\mu_i$ with the mean of the points in the cluster $i$
+\item Update $\mu_i$ with the mean of the points in the cluster $i$
 \end{itemize}
 
+\section{Principal component analysis}
+
+Equivalently:
+
+\begin{itemize}
+\item Minimize the mean of the squared distances between $x_i$ and their projections
+\item Maximize the variance of the projection
+\end{itemize}
+
+Algorithm:
+\begin{enumerate}
+\item Compute covariance matrix $S = \frac{1}{N} \sum_{n=1}^N (x_n - \bar x) (x_n - \bar x)^T$
+\item Decompose into eigen vectors $S=U \Lambda U^T$
+\item Conserve only desired $M$ eigen vectors $S \approx U_M \Lambda_M U_M^T$
+\end{enumerate}
+
+For a vector $x$ we get $z(x) = \Lambda_M^{-\frac{1}{2}} U_M^T (x - \bar x)$
+
+Transformed points have a $cov = I$.
+
+PCA is also \textbf{kernelizable}.
 
 \end{multicols}
 \end{document}
