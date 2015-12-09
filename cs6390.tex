@@ -96,9 +96,15 @@ $$\mathcal{N}_{\mu, \Sigma}(x) = \frac{1}{(2 \pi)^\frac{d}{2} \sqrt{|\Sigma|}} \
 
 \textbf{IID dataset}: All random variables are independent and follow the same distribution.
 
-\textbf{Bias/variance trade-off}: Approximation error/estimate error
+\textbf{Bias/variance trade-off}: The model does not contain a perfect function/the data does not cover all cases
 
 \textbf{Small training dataset}: Cross validation
+
+\subsection{Cost functions}
+\textbf{Cross-entropy}:
+$$L(y,t) = -(t \ln(y) + (1-t) \ln(1-y))$$
+
+\textbf{Quadratic error}: $$L(y, t) = \lVert y-t \rVert^2 = \sum_{k=1}^m(y_k - t_k)^2$$
 
 \section{Problem types}
 
@@ -126,6 +132,17 @@ Binary classification: The discriminative fonction is compared to a threshold (e
 Multiclass : Decision = $\argmax(g(x))$\\
 one-hot encoding: bits vector where all elements are zeros except for the one that corresponds to the class
 
+\textbf{A posteriori estimator}: $\hat p (x | C_i)$
+
+\textbf{A priori estimator}: $\hat P (C_i)$
+
+\section{Bayes}
+$$P_{Y|X}(c|x) = \frac{p_{X|Y} (x|c) P_Y(c)}{p_X(x)}$$
+
+\textbf{Naive bayes}: We suppose all $X_i$s are independent.
+
+Naive bayes $\subset$ Bayes
+
 \section{k-NN}
 \begin{tabular}{@{}p{\the\MyLen}%
                 @{}p{\linewidth-\the\MyLen}@{}}
@@ -137,7 +154,9 @@ Multiclass classification & $\argmax(f(onehot))$
 \end{tabular}
 
 \section{Decision trees}
-All trees can be represented as binary trees.
+
+\textbf{Pros}: Work with non-metric data, translation, scaling invariant, interpretability, efficient training and classification
+\textbf{Cons}: Instability = adding a single point can drastically change the tree structure
 
 \textbf{Class frequencies} $\mu_j = \frac{\#\{class = C_j\}}{n}$
 
@@ -172,14 +191,40 @@ with $\check{X} =\begin{pmatrix}
 
 or learn using gradient descent.
 
+\textbf{Regularization} Elastic net = lasso + ridge
+$$\Omega(\theta)=\Omega(w, b) = \lambda_1 ||w_1||_1 + \lambda_2 ||w_2||_2^2$$
+
+\section{Support vector machines}
+
+\textbf{Margin}: $\mathcal{H}_{w,b} = \{x | \langle w, x \rangle + b = 0\}$ where $x$ is the closest example.
+
+Distance between a point and the hyperplan:
+$$d(x, \mathcal{H}_{w,b}) = \Big| \frac{\langle w, x \rangle + b}{||w||} \Big| $$
+
+\textbf{Find optimal hyperplan} that:
+\begin{itemize}
+\item Separate datas $(\langle w, x_i\rangle + b) y_i > 0$
+\item Maximize the margin $w, b = \argmax_{w, b} \big\{ \min_i d(x_i, \mathcal{H}_{w,b}) \big\} = \argmax_{w, b} \big\{ \Big| \frac{\langle w, x \rangle + b}{\lVert w\rVert} \Big| y_iehf \big\}$
+\end{itemize}
+
+\section{Kernel trick}
+
+\begin{itemize}
+\item Usual dot product : $K(a, b) = \langle a, b \rangle$
+\item Polynomial degree $k$: $K_k(a, b) = (1 + \langle a, b \rangle)^k$
+\item RBF (=Gaussian): $K_{\sigma}(a, b) = e^{-\frac{1}{2} \frac{\lVert a-b\rVert^2}{\sigma^2}}$
+\end{itemize}
 
 \section{Ensemble methods}
 
+Goal: improve stability (minimize variance) or the capacity (minimize bias)
+
 \subsection{Bagging}
+= \textbf{B}ootstrap + aver\textbf{aging}
 
-\textbf{Bootstrap} : Sample $T$ times $m$ elements from the training set $\mathcal{D}_t$.
+\textbf{Bootstrap} : Sample $T$ times $m$ elements from the training set $\mathcal{D}_t$, construct a predictor on each set $h_t = A(\mathcal{D}_t)$.
 
-Construct a predictor on each set $h_t = A(\mathcal{D}_t)$. The resulting predictor consists in averaging all predictors:
+\textbf{Average} : The resulting predictor consists in averaging all predictors:
 $$f(x) = \frac{1}{T} \sum_{t=1}^T h_t(x)$$
 
 \subsection{Boosting}
@@ -193,6 +238,17 @@ $$f(x) = \frac{1}{T} \sum_{t=1}^T h_t(x)$$
 $$f(x) = \sum_{t=1}^T \alpha_t h_t(x) \, , \alpha_t > 0$$
 
 \textbf{Weighted classification error} $A(\mathcal{D}, D) = \arg \min_{h \in \mathcal{H}} \sum_{i=1}^m D(i) I_{\{h(x_i) \neq y_i\}}$
+
+\subsubsection{Adaboost}
+
+\begin{enumerate}
+\item Find $h_t = \arg \min_{h_j \in \mathcal{H}} \epsilon_j = \sum_{i=1}^m D_t(i) [y_i \neq h_j(x_i)] $.
+\item If $\epsilon \geq 1/2$ then stop.
+\item Set $\alpha_t = \frac{1}{2} \ln \big( \frac{1-\epsilon_t}{\epsilon_t} \big)$.
+\item Update $D_{t+1}(i) = \frac{D_t(i) \exp(-\alpha_t y_i h_t(x_i))}{Z_t}$ where $Z_t$ is a normalization factor.
+\end{enumerate}
+
+This can be seen as a gradient descent optimization to find the best $h_t$ and the best $\alpha_t$.
 
 \section{Clustering}
 
@@ -228,7 +284,19 @@ Transformed points have a $cov = I$.
 
 PCA is also \textbf{kernelizable}.
 
+\subsection{Auto encoders}
+
+An ANN that reconstructs its input with bottlenecks = hidden layers have less neurons than input.
+
+For linear networks or networks with a single hidden layer, it is equivalent to PCA.
+
 \section{Multilayer perceptron}
+
+Cost function for a linear perceptron:
+$$J(\theta) = \frac{1}{n} \sum_{i=1}^n I_{\{(w^Tx^{(i)} + b)t^{(i)} < 0\}} (-(w^Tx^{(i)} + b)t^{(i)})$$
+
+\subsection{Logistic regression}
+$$f_\theta(x) = f_{w, b}(x) = \text{sigmoid}(\langle w, x \rangle + b)$$
 
 \subsubsection{Gradient descent}
 $$\theta \leftarrow \theta - \eta \frac{\partial J}{\partial \theta}(\theta)$$
@@ -236,6 +304,31 @@ $$\theta \leftarrow \theta - \eta \frac{\partial J}{\partial \theta}(\theta)$$
 \textbf{Mini batch}: Apply gradient descent on smaller subsets
 
 \textbf{Stochastic (SGD)}: mini batch with batch size $=1$
+
+\section{Probabilistic graphical models}
+
+\textbf{Usages}: For multivariate distributions, generate data, compute probability of a configuration, infer the most probable value, learn parameters of a distribution given samples.
+
+\subsection{Definitions}
+\begin{itemize}
+\item $X$ marginally independent from $Y$ iff $
+P(X, Y) = P(X)P(Y)$
+\item $X$ conditionnally independant from $Y$ given $Z$ iff $P(X, Y | Z) = P(X|Z)P(Y|Z)$
+\end{itemize}
+
+In a graph $P(X_1, ..., X_d) = \prod_{i=1}^d P(X_i | Pa_i)$
+
+\textbf{square} Categorical variable\\
+\textbf{circle} Continuous variable
+
+\subsection{Expectation maximization}
+
+Let $Z$ be the latent variables.
+
+\begin{enumerate}
+\item infer distribution $Z$ for each observed example $X$ given current parameters $\theta$ (expectation)
+\item suppose $Z$ are observed and find parameters $\theta$ that maximize the likelihood
+\end{enumerate}
 
 \end{multicols}
 \end{document}
