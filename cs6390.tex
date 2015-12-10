@@ -100,6 +100,16 @@ $$\mathcal{N}_{\mu, \Sigma}(x) = \frac{1}{(2 \pi)^\frac{d}{2} \sqrt{|\Sigma|}} \
 
 \textbf{Small training dataset}: Cross validation
 
+\subsection{Hyperparameters}
+
+\begin{itemize}
+\item Control the size of the function family
+\item Guide the model toward a certain preference
+\item Choose a function family amongst several families
+\item Control optimization
+\end{itemize}
+
+
 \subsection{Cost functions}
 \textbf{Cross-entropy}:
 $$L(y,t) = -(t \ln(y) + (1-t) \ln(1-y))$$
@@ -307,7 +317,7 @@ $$\theta \leftarrow \theta - \eta \frac{\partial J}{\partial \theta}(\theta)$$
 
 \section{Probabilistic graphical models}
 
-\textbf{Usages}: For multivariate distributions, generate data, compute probability of a configuration, infer the most probable value, learn parameters of a distribution given samples.
+\textbf{Usages}: For multivariate distributions, generate data, compute probability of a configuration, infer the most probable value of a subset of variables given observations, learn parameters of a distribution given samples.
 
 \subsection{Definitions}
 \begin{itemize}
@@ -321,9 +331,11 @@ In a graph $P(X_1, ..., X_d) = \prod_{i=1}^d P(X_i | Pa_i)$
 \textbf{square} Categorical variable\\
 \textbf{circle} Continuous variable
 
-\subsection{Expectation maximization}
+\subsection{Latent variables learning}
 
-Let $Z$ be the latent variables.
+\textbf{Gradient descent} on the maximum likelihood; or
+
+\textbf{Expectation maximization}: let $Z$ be the latent variables.
 
 \begin{enumerate}
 \item infer distribution $Z$ for each observed example $X$ given current parameters $\theta$ (expectation)
