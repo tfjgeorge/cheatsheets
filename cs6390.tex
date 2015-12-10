@@ -204,6 +204,16 @@ or learn using gradient descent.
 \textbf{Regularization} Elastic net = lasso + ridge
 $$\Omega(\theta)=\Omega(w, b) = \lambda_1 ||w_1||_1 + \lambda_2 ||w_2||_2^2$$
 
+\subsection{Linear classifiers}
+(when used in a binary classification problem)
+\begin{itemize}
+\item Nearest centroid
+\item Bayes with gaussian densities
+\item Linear regression with target $\{-1, 1\}$
+\item Perceptron
+\item Logistic regression
+\item Linear SVM
+\end{itemize}
 \section{Support vector machines}
 
 \textbf{Margin}: $\mathcal{H}_{w,b} = \{x | \langle w, x \rangle + b = 0\}$ where $x$ is the closest example.
@@ -214,8 +224,11 @@ $$d(x, \mathcal{H}_{w,b}) = \Big| \frac{\langle w, x \rangle + b}{||w||} \Big| $
 \textbf{Find optimal hyperplan} that:
 \begin{itemize}
 \item Separate datas $(\langle w, x_i\rangle + b) y_i > 0$
-\item Maximize the margin $w, b = \argmax_{w, b} \big\{ \min_i d(x_i, \mathcal{H}_{w,b}) \big\} = \argmax_{w, b} \big\{ \Big| \frac{\langle w, x \rangle + b}{\lVert w\rVert} \Big| y_iehf \big\}$
+\item Maximize the margin $w, b = \argmax_{w, b} \big\{ \min_i d(x_i, \mathcal{H}_{w,b}) \big\} = \argmax_{w, b} \big\{ \Big| \frac{\langle w, x \rangle + b}{\lVert w\rVert} \Big| y_i \big\}$
 \end{itemize}
+
+\textbf{Primal}: Minimize $\frac{1}{2} \lVert w \rVert ^2$ with constraints $y_i(w^Tx_i + b) \geq 1$
+\textbf{Dual}: Maximize $\tilde L(\alpha) = \sum_{k=1}^n \alpha_k - \frac{1}{2} \sum_{i, j} \alpha_i \alpha_j y_i y_j x_i^T x_j$ with constraints $\alpha_i \geq 0$, et $\sum_{i=1}^n \alpha_i y_i = 0$
 
 \section{Kernel trick}
 
