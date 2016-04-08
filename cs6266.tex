@@ -1,0 +1,192 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{amsfonts}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+\usepackage{stmaryrd}
+\usepackage{amsmath}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\begin{center}
+     \Large{\textbf{IFT6266 Cheat Sheet}} \\
+     Thomas George 2016
+\end{center}
+
+\section{Machine learning basics}
+
+\subsection{Some distributions}
+
+\begin{itemize}
+\item \textbf{Bernoulli} : $P(x=1) = \phi$, $P(x=0) = 1 - \phi$
+\item \textbf{Gaussian} : $\mathcal{N}(x; \mu, \sigma^2) = \sqrt{\frac{1}{2 \pi \sigma^2}} \exp \Big( - \frac{1}{2 \sigma^2} (x - \mu)^2 \Big)$
+\item \textbf{Laplace} : $\text{Laplace}(x; \mu, \gamma) = \frac{1}{2 \gamma} \exp \Big( - \frac{\lvert x - \mu \rvert}{\gamma} \Big)$
+\end{itemize}
+
+\subsection{Entropy}
+
+$$H(x) = \mathbb{E}_{x \sim P}[- \log P(x)]$$
+
+\subsection{Cross-entropy}
+
+$$H(P,Q) = \mathbb{E}_{x \sim P}[- \log Q(x)]$$
+
+\subsection{Kullback-Leibler divergence}
+
+$$D_{KL}(P \lVert Q) = \mathbb{E}_{x \sim P}\Big[\log \frac{P(x)}{Q(x)} \Big]$$
+
+\subsection{Maximum likelihood estimator}
+
+$$\mathbf{\theta}_{ML} = \argmax_\theta p_{\text{model}}(\mathbb{X}; \theta) = \argmax_\theta \prod_{i=1}^m p_{\text{model}}(\mathbf{x}^{(i)}; \theta)$$
+where the $x_i$s are samples from the empirical distribution $\hat p_\text{data}$. Same but expressed in term of log and rescaled by $\frac{1}{m}$:
+
+$$\mathbf{\theta}_{ML} = \argmax_\theta \mathbb{E}_{\mathbf{x} \sim \hat p_\text{data}} \big[ \log p_{\text{model}}(\mathbf{x}; \theta) \big]$$
+
+\section{Neural networks basics}
+
+\subsection{Multilayer perceptron}
+
+\subsection{Convolutional networks}
+
+\subsection{Recurrent networks}
+
+\subsection{Activation functions}
+
+\begin{itemize}
+\item \textbf{Logistic sigmoid} : $\sigma(x) = \frac{1}{1+\exp(-x)}$
+\item \textbf{Softplus} : $\zeta(x) = \log(1 + \exp(x))$
+\item \textbf{Rectifier} : $\text{ReLU}(x) = \max(0, x)$
+\item \textbf{Softmax} : $\text{softmax}(\mathbf{x})_i = \frac{\exp(x_i)}{\sum_j \exp(x_j)}$
+\end{itemize}
+
+\section{Regularization}
+
+\subsection{L1}
+
+\subsection{L2}
+
+\subsection{Early stopping}
+
+\section{Optimization}
+
+\subsection{Jacobian matrix}
+
+$$J_{i,j} = \frac{\partial}{\partial x_j} f(\mathbf{x})_i$$
+
+\subsection{Hessian matrix}
+
+$$\mathbf{H}(f)(\mathbf{x})_{i,j} = \frac{\partial^2}{\partial x_i\partial x_j} f(\mathbf{x})$$
+
+\subsection{Newton's method}
+
+$$\mathbf{x}^* = \mathbf{x}^{(0)} - \mathbf{H}(f)(\mathbf{x}^{(0)})^{-1} \nabla_x f(\mathbf{x}^{(0)})$$
+
+\subsection{Backpropagation}
+
+\subsection{Stochastic gradient descent}
+
+\section{Autoencoders}
+
+\section{Representation learning}
+
+\section{Graphical models}
+
+\subsection{Basics}
+
+\subsubsection{Directed graphical models}
+
+$$p(\mathbf{x}) = \prod_i p(x_i \lvert Pa_{\mathcal{G}}(x_i))$$
+
+\subsubsection{Undirected graphical models}
+
+$$p(\mathbf{x}) = \frac{1}{Z} \prod_i \phi^{(i)} \Big( \mathcal{C}^{(i)} \Big)$$
+
+over the cliques $\mathcal{C}^{(i)}$ 
+
+\subsection{Restricted Boltzmann machines}
+
+\subsection{Deep Belief Networks}
+
+\subsection{Deep Boltzmann Machines}
+
+\subsection{Variational Auto Encoders}
+
+\subsection{Generative Adversarial Networks}
+
+\section{Sampling methods}
+
+\subsection{Approximate inference}
+
+\subsection{Monte-Carlo}
+
+\subsection{MCMC}
+
+\subsection{Gibbs sampling}
+
+\end{multicols}
+\end{document}
