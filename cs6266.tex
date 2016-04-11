@@ -105,8 +105,9 @@ $$D_{KL}(P \lVert Q) = \mathbb{E}_{x \sim P}\Big[\log \frac{P(x)}{Q(x)} \Big]$$
 $$\mathbf{\theta}_{ML} = \argmax_\theta p_{\text{model}}(\mathbb{X}; \theta) = \argmax_\theta \prod_{i=1}^m p_{\text{model}}(\mathbf{x}^{(i)}; \theta)$$
 where the $x_i$s are samples from the empirical distribution $\hat p_\text{data}$. Same but expressed in term of log and rescaled by $\frac{1}{m}$:
 
-$$\mathbf{\theta}_{ML} = \argmax_\theta \mathbb{E}_{\mathbf{x} \sim \hat p_\text{data}} \big[ \log p_{\text{model}}(\mathbf{x}; \theta) \big]$$
+$$\mathbf{\theta}_{ML} = \argmax_\theta \mathbb{E}_{\mathbf{x} \sim \hat p_\text{data}} \big[ \log p_{\text{model}}(\mathbf{x}; \mathbf{\theta}) \big]$$
 
+can be derived by minimizing $D_{KL}(\hat{p}_\text{data} \lVert p_\text{model})$ for the empirical dataset.
 \section{Neural networks basics}
 
 \subsection{Multilayer perceptron}
