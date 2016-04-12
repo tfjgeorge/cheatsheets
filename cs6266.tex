@@ -251,7 +251,13 @@ $$p(h_i = 1 \lvert \mathbf v) = \sigma \big( \mathbf v^T \mathbf W_{:,i} + b_i \
 
 \subsection{Monte-Carlo}
 
+$$\hat s_n = \frac{1}{n} \sum_{i=1, \mathbf{x}^{(i)} \sim p}^n f(\mathbf{x}^{(i)})$$
+
 \subsection{MCMC}
+
+TODO
+ 
+Problem: it mixes poorly between modes. This can be attenuated by adding a temperature parameter $p_{\beta} (\mathbf{x}) \propto \exp(-\beta E(\mathbf{x}))$.
 
 \subsection{Ancestral sampling}
 
@@ -259,9 +265,41 @@ For directed graphical models, using the topological ordering, draw sequentially
 
 \subsection{Gibbs sampling}
 
-For undirected graphical models, draw samples from $p(x_i \lvert x_{-i})$. Asymtotically, it converges to sampling from the correct distribution.
+For undirected graphical models, draw samples from $p(x_i \lvert x_{-i})$. Asymptotically, it converges to sampling from the correct distribution.
 
 \subsection{Importance sampling}
+
+$$\hat s_q = \frac{1}{n} \sum_{i=1, \mathbf{x}^{(i)} \sim q}^n \frac{p(\mathbf{x}^{(i)}) f(\mathbf{x}^{(i)})}{q(\mathbf{x}^{(i)})}$$
+
+\section{Partition function}
+
+Log-likelihood for an undirected model $p(\mathbf x;\mathbf \theta) = \frac{1}{Z(\mathbf{\theta})} \tilde p(\mathbf x;\mathbf \theta)$:
+$$\nabla_{\theta} \log p(\mathbf x;\mathbf \theta) = \nabla_{\theta} \log \tilde p(\mathbf x;\mathbf \theta) - \nabla_{\theta} \log Z(\mathbf \theta)$$
+
+The first term is called the positive phase, the second term the negative phase and we have:
+
+$$\nabla_{\theta} \log Z(\mathbf \theta) = \mathbb{E}_{\mathbf{x} \sim p(\mathbf{x})} \nabla_{\theta} \log \tilde p(\mathbf x)$$
+
+\subsection{Stochastic maximum likelihood algorithm}
+
+The method to get an estimate of the gradient to do a gradient descent step is:
+\begin{enumerate}
+\item Sample a minibatch of $m$ examples from the training set
+\item $\mathbf g \leftarrow \frac{1}{m} \sum_{i=1}^m \nabla_{\theta} \log \tilde p(\mathbf x^{(i)};\mathbf \theta)$
+\item Initialize a set of $m$ samples to random values
+\item for all samples, do $k$ Gibbs steps, high enough to burn in, to get a good sample from $\tilde p$.
+\item $\mathbf g \leftarrow \mathbf g - \frac{1}{m} \sum_{i=1}^m \nabla_{\theta} \log \tilde p(\tilde{\mathbf{x}}^{(i)};\mathbf \theta)$
+\end{enumerate}
+
+\subsection{Contrastive divergence}
+
+Same as above, but start from examples from the training set instead of random samples for the negative phase. We do not require the many Gibbs steps needed for burn in (1 might be enough).
+
+It fails at suppressing \textbf{spurious modes}, modes that have high probability under the model but low probability under the data generating distribution.
+
+\subsection{Persistent contrastive divergence}
+
+Start the sampling step from the previous samples.
 
 \end{multicols}
 \end{document}
