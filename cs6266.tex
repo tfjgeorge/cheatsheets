@@ -7,6 +7,7 @@
 \usepackage{hyperref}
 \usepackage{stmaryrd}
 \usepackage{amsmath}
+\usepackage{tikz}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -108,6 +109,13 @@ where the $x_i$s are samples from the empirical distribution $\hat p_\text{data}
 $$\mathbf{\theta}_{ML} = \argmax_\theta \mathbb{E}_{\mathbf{x} \sim \hat p_\text{data}} \big[ \log p_{\text{model}}(\mathbf{x}; \mathbf{\theta}) \big]$$
 
 can be derived by minimizing $D_{KL}(\hat{p}_\text{data} \lVert p_\text{model})$ for the empirical dataset.
+
+\subsection{Bias, variance, MSE}
+
+$$\text{Bias}(\hat \theta_m) = \mathbb{E}(\hat \theta_m) - \theta$$
+$$\text{Var}(\hat \theta_m)$$
+$$\text{MSE}(\hat \theta_m) = \text{Bias}(\hat \theta_m)^2 + \text{Var}(\hat \theta_m)$$
+
 \section{Neural networks basics}
 
 \subsection{Multilayer perceptron}
@@ -129,9 +137,23 @@ can be derived by minimizing $D_{KL}(\hat{p}_\text{data} \lVert p_\text{model})$
 
 \subsection{L1}
 
+Results in a solution that is more sparse.
+
 \subsection{L2}
 
+The regularizer has a strong effect along axis where the objective function does not change much. It is equivalent to MAP bayesian inference with a Gaussian prior on the weights.
+
 \subsection{Early stopping}
+
+Equivalent to L2 for a simple linear model with quadratic error.
+
+\subsection{Sparsity regularization}
+
+Add term $\Omega(h)$ to the cost where $h$ is a hidden representation.
+
+\subsection{Data augmentation}
+
+\subsection{Dropout}
 
 \section{Optimization}
 
@@ -153,6 +175,24 @@ $$\mathbf{x}^* = \mathbf{x}^{(0)} - \mathbf{H}(f)(\mathbf{x}^{(0)})^{-1} \nabla_
 
 \section{Autoencoders}
 
+Encoder $f$, decoder $g$:
+$$\mathcal{J}_{AE}(\theta) = \sum_x L(x, g(f(x)))$$ where the reconstruction error $L$ can be the squared error for linear reconstruction or maximum likelihood for sigmoid outputs.
+
+\subsection{Regularized autoencoders}
+
+Add weigth decay over the parameters.
+
+\subsection{Denoising autoencoders}
+
+Corrupt $x$ before sending it through the auto-encoder:
+$$\mathcal{J}_{DAE}(\theta) = \sum_x \mathbb{E}_{\tilde x \sim q(\tilde x \lvert x)} \big[ L(x, g(f(\tilde x))) \big]$$
+
+\subsection{Contractive autoencoders}
+
+Add a regularization over the Foebius norm of the Jacobian :
+
+$$\lVert J_f(x) \rVert_F^2 = \sum_{ij} \Big( \frac{\partial h_j(x)}{\partial x_i} \Big)^2$$
+
 \section{Representation learning}
 
 \section{Graphical models}
@@ -167,9 +207,31 @@ $$p(\mathbf{x}) = \prod_i p(x_i \lvert Pa_{\mathcal{G}}(x_i))$$
 
 $$p(\mathbf{x}) = \frac{1}{Z} \prod_i \phi^{(i)} \Big( \mathcal{C}^{(i)} \Big)$$
 
-over the cliques $\mathcal{C}^{(i)}$ 
+over the cliques $\mathcal{C}^{(i)}$. 
 
 \subsection{Restricted Boltzmann machines}
+
+\begin{center}
+\begin{tikzpicture}
+  [inner sep=1mm,
+   hidden/.style={circle,draw=blue!50,fill=blue!20,thick},
+   visible/.style={circle,draw=black!50,fill=black!20,thick}]
+  \useasboundingbox (-0.5,0) rectangle (7,2.5);
+  \node at (0,0) (v1) [visible] {$v_1$};
+  \node at (2,0) (v2) [visible] {$v_2$};
+  \node at (4,0) (v3) [visible] {$v_3$};
+  \node at (6,0) (v4) [visible] {$v_4$};
+  \node at (1,2) (h1) [hidden] {$h_1$};
+  \node at (3,2) (h2) [hidden] {$h_2$};
+  \node at (5,2) (h3) [hidden] {$h_3$};
+  \foreach \x in {1,...,4}
+     \foreach \y in {1,...,3}
+       \draw [-] (v\x) to (h\y);
+\end{tikzpicture}
+\end{center}
+
+$$Energy(v,h)=-b'h-c'v-h'Wv.$$
+$$P(v,h)=\frac{1}{Z}e^{-Energy(v,h)}$$
 
 \subsection{Deep Belief Networks}
 
@@ -187,7 +249,15 @@ over the cliques $\mathcal{C}^{(i)}$
 
 \subsection{MCMC}
 
+\subsection{Ancestral sampling}
+
+For directed graphical models, using the topological ordering, draw sequentially samples from $p(x_i \lvert Pa_{\mathcal{G}}(x_i))$
+
 \subsection{Gibbs sampling}
+
+For undirected graphical models, draw samples from $p(x_i \lvert x_{-i})$. Asymtotically, it converges to sampling from the correct distribution.
+
+\subsection{Importance sampling}
 
 \end{multicols}
 \end{document}
