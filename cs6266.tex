@@ -230,8 +230,12 @@ over the cliques $\mathcal{C}^{(i)}$.
 \end{tikzpicture}
 \end{center}
 
-$$Energy(v,h)=-b'h-c'v-h'Wv.$$
-$$P(v,h)=\frac{1}{Z}e^{-Energy(v,h)}$$
+$$E(\mathbf v,\mathbf h)=-\mathbf{b}^T \mathbf{v} - \mathbf c^T \mathbf h - \mathbf v^T \mathbf W \mathbf h$$
+$$p(\mathbf v,\mathbf h)=\frac{1}{Z}e^{-E(\mathbf v,\mathbf h)}$$
+\begin{center}
+$p(\mathbf v \lvert \mathbf h) = \prod_i p(v_i \lvert \mathbf{h})$ and $p(\mathbf h \lvert \mathbf v) = \prod_i p(h_i \lvert \mathbf{v})$
+$$p(h_i = 1 \lvert \mathbf v) = \sigma \big( \mathbf v^T \mathbf W_{:,i} + b_i \big)$$
+\end{center}
 
 \subsection{Deep Belief Networks}
 
