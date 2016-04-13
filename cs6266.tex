@@ -91,7 +91,7 @@
 
 \subsection{Entropy}
 
-$$H(x) = \mathbb{E}_{x \sim P}[- \log P(x)]$$
+$$H(P) = \mathbb{E}_{x \sim P}[- \log P(x)]$$
 
 \subsection{Cross-entropy}
 
@@ -127,9 +127,10 @@ $$\text{MSE}(\hat \theta_m) = \text{Bias}(\hat \theta_m)^2 + \text{Var}(\hat \th
 \subsection{Activation functions}
 
 \begin{itemize}
-\item \textbf{Logistic sigmoid} : $\sigma(x) = \frac{1}{1+\exp(-x)}$
-\item \textbf{Softplus} : $\zeta(x) = \log(1 + \exp(x))$
-\item \textbf{Rectifier} : $\text{ReLU}(x) = \max(0, x)$
+\item \textbf{Logistic sigmoid} : $\sigma(\mathbf x) = \frac{1}{1+\exp(- \mathbf x)}$
+\item \textbf{Softplus} : $\zeta(\mathbf x) = \log(1 + \exp(\mathbf x))$
+\item \textbf{Rectifier} : $\text{ReLU}(\mathbf x) = \max(0,\mathbf x)$
+\item \textbf{Leaky ReLU} : $\text{Leaky}(\mathbf x) = \max(a \mathbf x, \mathbf x)$ ($a \in [0,1]$)
 \item \textbf{Softmax} : $\text{softmax}(\mathbf{x})_i = \frac{\exp(x_i)}{\sum_j \exp(x_j)}$
 \end{itemize}
 
@@ -236,7 +237,8 @@ $$p(\mathbf v,\mathbf h)=\frac{1}{Z}e^{-E(\mathbf v,\mathbf h)}$$
 $p(\mathbf v \lvert \mathbf h) = \prod_i p(v_i \lvert \mathbf{h})$ and $p(\mathbf h \lvert \mathbf v) = \prod_i p(h_i \lvert \mathbf{v})$
 $$p(h_i = 1 \lvert \mathbf v) = \sigma \big( \mathbf v^T \mathbf W_{:,i} + b_i \big)$$
 \end{center}
-
+The intractable $p(\mathbf{v}) = \sum_{\mathbf{h}} p(\mathbf{v}, \mathbf{h})$ can be rewritten:
+$$p(\mathbf{v}) = \frac{1}{Z} \exp \Big( \mathbf{b}^T \mathbf{v} + \sum_{j=1}^H \text{softplus} \big(c_j + \mathbf{v}^T \mathbf{W}_.j \big) \Big)$$
 \subsection{Deep Belief Networks}
 
 \subsection{Deep Boltzmann Machines}
@@ -244,34 +246,6 @@ $$p(h_i = 1 \lvert \mathbf v) = \sigma \big( \mathbf v^T \mathbf W_{:,i} + b_i \
 \subsection{Variational Auto Encoders}
 
 \subsection{Generative Adversarial Networks}
-
-\section{Sampling methods}
-
-\subsection{Approximate inference}
-
-\subsection{Monte-Carlo}
-
-$$\hat s_n = \frac{1}{n} \sum_{i=1, \mathbf{x}^{(i)} \sim p}^n f(\mathbf{x}^{(i)})$$
-
-\subsection{MCMC}
-
-TODO
- 
-Problem: it mixes poorly between modes. This can be attenuated by adding a temperature parameter $p_{\beta} (\mathbf{x}) \propto \exp(-\beta E(\mathbf{x}))$.
-
-\subsection{Ancestral sampling}
-
-For directed graphical models, using the topological ordering, draw sequentially samples from $p(x_i \lvert Pa_{\mathcal{G}}(x_i))$
-
-\subsection{Gibbs sampling}
-
-For undirected graphical models, draw samples from $p(x_i \lvert x_{-i})$. Asymptotically, it converges to sampling from the correct distribution.
-
-Block Gibbs sampling can be used i.e. in RBMs where we have a closed form for $p(\mathbf v \lvert \mathbf h)$ and $p(\mathbf h \lvert \mathbf v)$.
-
-\subsection{Importance sampling}
-
-$$\hat s_q = \frac{1}{n} \sum_{i=1, \mathbf{x}^{(i)} \sim q}^n \frac{p(\mathbf{x}^{(i)}) f(\mathbf{x}^{(i)})}{q(\mathbf{x}^{(i)})}$$
 
 \section{Partition function}
 
@@ -304,6 +278,60 @@ It fails at suppressing \textbf{spurious modes}, modes that have high probabilit
 Start the sampling step from the previous samples. It is more resistant to forming models with spurious than CD.
 
 Also provides starting points for sampling for both visible and hidden units (as opposite to visible only for CD).
+
+
+\section{Sampling methods}
+
+\subsection{Monte-Carlo}
+
+$$\hat s_n = \frac{1}{n} \sum_{i=1, \mathbf{x}^{(i)} \sim p}^n f(\mathbf{x}^{(i)})$$
+
+\subsection{MCMC}
+
+TODO
+ 
+Problem: it mixes poorly between modes. This can be attenuated by adding a temperature parameter $p_{\beta} (\mathbf{x}) \propto \exp(-\beta E(\mathbf{x}))$.
+
+\subsection{Ancestral sampling}
+
+For directed graphical models, using the topological ordering, draw sequentially samples from $p(x_i \lvert Pa_{\mathcal{G}}(x_i))$
+
+\subsection{Gibbs sampling}
+
+For undirected graphical models, draw samples from $p(x_i \lvert x_{-i})$. Asymptotically, it converges to sampling from the correct distribution.
+
+Block Gibbs sampling can be used i.e. in RBMs where we have a closed form for $p(\mathbf v \lvert \mathbf h)$ and $p(\mathbf h \lvert \mathbf v)$.
+
+\subsection{Importance sampling}
+
+$$\hat s_q = \frac{1}{n} \sum_{i=1, \mathbf{x}^{(i)} \sim q}^n \frac{p(\mathbf{x}^{(i)}) f(\mathbf{x}^{(i)})}{q(\mathbf{x}^{(i)})}$$
+
+\section{Approximate inference}
+
+\textbf{Inference}: computing $p(\mathbf{h} \lvert \mathbf{v})$ or its expectation.
+
+\subsection{Variational free energy}
+
+Also called \textbf{evidence lower bound}:
+
+$$\mathcal{L}(\mathbf{v}; \mathbf{\theta}, q) = \log p(\mathbf{v}, \mathbf{\theta}) - D_{KL} \big( q(\mathbf{h} \lvert \mathbf{v}) \lVert p(\mathbf{h} \lvert \mathbf{v}; \mathbf{\theta}) \big)$$ (as opposed to maximum likelihood where we minimize $D_{KL}(\hat{p}_\text{data} \lVert p_\text{model})$)
+
+A more canonical definition is:
+
+$$\mathcal{L}(\mathbf{v}; \mathbf{\theta}, q) = \mathbb{E}_{\mathbf h \sim q} [ \log p(\mathbf h, \mathbf v)] + H(q)$$
+
+\subsection{Expectation maximization}
+
+\begin{itemize}
+\item \textit{E-step}: Maximize $\mathcal{L}$ w.r.t. $q$ i.e. find $q$ that best approximates $p$ on the training dataset
+\item \textit{M-step}: Maximize $\mathcal{L}$ w.r.t. $\theta$
+\end{itemize}
+
+\subsection{MAP inference}
+Find the single most likely value using \textit{maximum a posteriori} inference:
+
+$$\mathbf{h}^* = \argmax_{\mathbf{h}} p(\mathbf{h} \lvert \mathbf{v})$$
+
 
 \end{multicols}
 \end{document}
