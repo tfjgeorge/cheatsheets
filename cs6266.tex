@@ -267,6 +267,8 @@ For directed graphical models, using the topological ordering, draw sequentially
 
 For undirected graphical models, draw samples from $p(x_i \lvert x_{-i})$. Asymptotically, it converges to sampling from the correct distribution.
 
+Block Gibbs sampling can be used i.e. in RBMs where we have a closed form for $p(\mathbf v \lvert \mathbf h)$ and $p(\mathbf h \lvert \mathbf v)$.
+
 \subsection{Importance sampling}
 
 $$\hat s_q = \frac{1}{n} \sum_{i=1, \mathbf{x}^{(i)} \sim q}^n \frac{p(\mathbf{x}^{(i)}) f(\mathbf{x}^{(i)})}{q(\mathbf{x}^{(i)})}$$
@@ -299,7 +301,9 @@ It fails at suppressing \textbf{spurious modes}, modes that have high probabilit
 
 \subsection{Persistent contrastive divergence}
 
-Start the sampling step from the previous samples.
+Start the sampling step from the previous samples. It is more resistant to forming models with spurious than CD.
+
+Also provides starting points for sampling for both visible and hidden units (as opposite to visible only for CD).
 
 \end{multicols}
 \end{document}
