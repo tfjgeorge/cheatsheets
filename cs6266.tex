@@ -116,6 +116,10 @@ $$\text{Bias}(\hat \theta_m) = \mathbb{E}(\hat \theta_m) - \theta$$
 $$\text{Var}(\hat \theta_m)$$
 $$\text{MSE}(\hat \theta_m) = \text{Bias}(\hat \theta_m)^2 + \text{Var}(\hat \theta_m)$$
 
+\subsection{Bayes' rule}
+
+$$P(x \lvert y) = \frac{P(x) P(y \lvert x)}{P(y)}$$
+
 \section{Neural networks basics}
 
 \subsection{Multilayer perceptron}
@@ -127,7 +131,7 @@ $$\text{MSE}(\hat \theta_m) = \text{Bias}(\hat \theta_m)^2 + \text{Var}(\hat \th
 \subsection{Activation functions}
 
 \begin{itemize}
-\item \textbf{Logistic sigmoid} : $\sigma(\boldsymbol x) = \frac{1}{1+\exp(- \boldsymbol x)}$
+\item \textbf{Logistic sigmoid} : $\sigma(\boldsymbol x) = \frac{1}{1+\exp(- \boldsymbol x)}$, $\frac{d}{dx} \sigma(x) = \sigma(x)(1-\sigma(x))$
 \item \textbf{Softplus} : $\zeta(\boldsymbol x) = \log(1 + \exp(\boldsymbol x))$
 \item \textbf{Rectifier} : $\text{ReLU}(\boldsymbol x) = \max(0,\boldsymbol x)$
 \item \textbf{Leaky ReLU} : $\text{Leaky}(\boldsymbol x) = \max(a \boldsymbol x, \boldsymbol x)$ ($a \in [0,1]$)
@@ -312,7 +316,9 @@ $$\hat s_n = \frac{1}{n} \sum_{i=1, \boldsymbol{x}^{(i)} \sim p}^n f(\boldsymbol
 
 \subsection{MCMC}
 
-TODO
+For a good transition operator $T$ that can be one of the strategies below (ancestral sampling, gibbs sampling), we get:
+
+$$q'(\boldsymbol x') = \mathbb{E}_{\boldsymbol x \sim q} T(\boldsymbol x' \lvert \boldsymbol x)$$
  
 Problem: it mixes poorly between modes. This can be attenuated by adding a temperature parameter $p_{\beta} (\boldsymbol{x}) \propto \exp(-\beta E(\boldsymbol{x}))$.
 
