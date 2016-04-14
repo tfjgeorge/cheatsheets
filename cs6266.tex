@@ -126,7 +126,13 @@ $$P(x \lvert y) = \frac{P(x) P(y \lvert x)}{P(y)}$$
 
 \subsection{Convolutional networks}
 
+\vspace{30 mm}
+
+
 \subsection{Recurrent networks}
+
+\vspace{30 mm}
+
 
 \subsection{Activation functions}
 
@@ -161,6 +167,10 @@ Add term $\Omega(h)$ to the cost where $h$ is a hidden representation.
 \subsection{Dropout}
 
 \section{Optimization}
+
+\subsection{Algorithms}
+
+\vspace{30 mm}
 
 \subsection{Jacobian matrix}
 
@@ -240,24 +250,24 @@ over the cliques $\mathcal{C}^{(i)}$.
 
 \subsection{Restricted Boltzmann machines}
 
-\begin{center}
-\begin{tikzpicture}
-  [inner sep=1mm,
-   hidden/.style={circle,draw=blue!50,fill=blue!20,thick},
-   visible/.style={circle,draw=black!50,fill=black!20,thick}]
-  \useasboundingbox (-0.5,0) rectangle (7,2.5);
-  \node at (0,0) (v1) [visible] {$v_1$};
-  \node at (2,0) (v2) [visible] {$v_2$};
-  \node at (4,0) (v3) [visible] {$v_3$};
-  \node at (6,0) (v4) [visible] {$v_4$};
-  \node at (1,2) (h1) [hidden] {$h_1$};
-  \node at (3,2) (h2) [hidden] {$h_2$};
-  \node at (5,2) (h3) [hidden] {$h_3$};
-  \foreach \x in {1,...,4}
-     \foreach \y in {1,...,3}
-       \draw [-] (v\x) to (h\y);
-\end{tikzpicture}
-\end{center}
+%\begin{center}
+%\begin{tikzpicture}
+%  [inner sep=1mm,
+%   hidden/.style={circle,draw=blue!50,fill=blue!20,thick},
+%   visible/.style={circle,draw=black!50,fill=black!20,thick}]
+%  \useasboundingbox (-0.5,0) rectangle (7,2.5);
+%  \node at (0,0) (v1) [visible] {$v_1$};
+%  \node at (2,0) (v2) [visible] {$v_2$};
+%  \node at (4,0) (v3) [visible] {$v_3$};
+%  \node at (6,0) (v4) [visible] {$v_4$};
+%  \node at (1,2) (h1) [hidden] {$h_1$};
+%  \node at (3,2) (h2) [hidden] {$h_2$};
+%  \node at (5,2) (h3) [hidden] {$h_3$};
+%  \foreach \x in {1,...,4}
+%     \foreach \y in {1,...,3}
+%       \draw [-] (v\x) to (h\y);
+%\end{tikzpicture}
+%\end{center}
 
 $$E(\boldsymbol v,\boldsymbol h)=-\boldsymbol{b}^T \boldsymbol{v} - \boldsymbol c^T \boldsymbol h - \boldsymbol v^T \boldsymbol W \boldsymbol h$$
 $$p(\boldsymbol v,\boldsymbol h)=\frac{1}{Z}e^{-E(\boldsymbol v,\boldsymbol h)}$$
@@ -267,13 +277,31 @@ $$p(h_i = 1 \lvert \boldsymbol v) = \sigma \big( \boldsymbol v^T \boldsymbol W_{
 \end{center}
 The intractable $p(\boldsymbol{v}) = \sum_{\boldsymbol{h}} p(\boldsymbol{v}, \boldsymbol{h})$ can be rewritten:
 $$p(\boldsymbol{v}) = \frac{1}{Z} \exp \Big( \boldsymbol{b}^T \boldsymbol{v} + \sum_{j=1}^H \text{softplus} \big(c_j + \boldsymbol{v}^T \boldsymbol{W}_.j \big) \Big)$$
+
 \subsection{Deep Belief Networks}
+
+$$p(\boldsymbol h^{(l)}, \boldsymbol h^{(l-1)})\propto $$$$\exp( (\boldsymbol b^{(l)})^T \boldsymbol h^{(l)} + (\boldsymbol b^{(l-1)})^T \boldsymbol h^{(l-1)} + (\boldsymbol h^{(l-1)})^T \boldsymbol W^{(l)} \boldsymbol h^{(l)} )$$
+
+$$p(h_i^{(k)}=1 \lvert \boldsymbol h^{(k+1)}) = \sigma \big(b_i^{(k)} + \boldsymbol W_{:,i}^{(k+1)T} \boldsymbol h^{(k+1)} \big)$$
+
+$$p(v_i=1 \lvert \boldsymbol h^{(1)}) = \sigma \big(b_i^{(0)} + \boldsymbol W_{:,i}^{(1)T} \boldsymbol h^{(1)} \big)$$
+
+A DBN with one hidden layer is a RBM.
 
 \subsection{Deep Boltzmann Machines}
 
+Can be unrolled into a bipartite undirected graphical model.
+
 \subsection{Variational Auto Encoders}
 
+
+\vspace{30 mm}
+
+
 \subsection{Generative Adversarial Networks}
+
+\vspace{30 mm}
+
 
 \section{Partition function}
 
