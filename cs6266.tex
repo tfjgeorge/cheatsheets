@@ -126,13 +126,20 @@ $$P(x \lvert y) = \frac{P(x) P(y \lvert x)}{P(y)}$$
 
 \subsection{Convolutional networks}
 
-\vspace{30 mm}
+Convolution operation:
+$$S(i,j) = (I * K)(i,j) = \sum_m \sum_n I(m,n) K(i-m, j-n)$$
 
+The kernel is flipped.
 
 \subsection{Recurrent networks}
 
-\vspace{30 mm}
-
+Operations for a simple RNN:
+\begin{align}
+\boldsymbol a(t) &= \boldsymbol b + \boldsymbol W \boldsymbol h^{(t-1)} + \boldsymbol U \boldsymbol x^{(t)}\\
+\boldsymbol h(t) &= \tanh(\boldsymbol a(t))\\
+\boldsymbol o(t) &= \boldsymbol c + \boldsymbol V \boldsymbol h^{(t)}\\
+\boldsymbol{\hat y}(t) &= \text{softmax}(\boldsymbol o^{(t)})
+\end{align}
 
 \subsection{Activation functions}
 
@@ -170,7 +177,7 @@ Add term $\Omega(h)$ to the cost where $h$ is a hidden representation.
 
 \subsection{Algorithms}
 
-\vspace{30 mm}
+\vspace{32 mm}
 
 \subsection{Jacobian matrix}
 
@@ -295,12 +302,12 @@ Can be unrolled into a bipartite undirected graphical model.
 \subsection{Variational Auto Encoders}
 
 
-\vspace{30 mm}
+\vspace{32 mm}
 
 
 \subsection{Generative Adversarial Networks}
 
-\vspace{30 mm}
+\vspace{32 mm}
 
 
 \section{Partition function}
