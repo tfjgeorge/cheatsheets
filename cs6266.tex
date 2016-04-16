@@ -11,6 +11,8 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[]{algorithmicx}
+
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 
@@ -134,12 +136,14 @@ The kernel is flipped.
 \subsection{Recurrent networks}
 
 Operations for a simple RNN:
-\begin{align}
+\begin{align*}
 \boldsymbol a(t) &= \boldsymbol b + \boldsymbol W \boldsymbol h^{(t-1)} + \boldsymbol U \boldsymbol x^{(t)}\\
 \boldsymbol h(t) &= \tanh(\boldsymbol a(t))\\
 \boldsymbol o(t) &= \boldsymbol c + \boldsymbol V \boldsymbol h^{(t)}\\
 \boldsymbol{\hat y}(t) &= \text{softmax}(\boldsymbol o^{(t)})
-\end{align}
+\end{align*}
+
+\textbf{Teacher forcing}: Use ground truth input $y(t)$ as input for time $t+1$.
 
 \subsection{Activation functions}
 
@@ -177,7 +181,27 @@ Add term $\Omega(h)$ to the cost where $h$ is a hidden representation.
 
 \subsection{Algorithms}
 
-\vspace{32 mm}
+\subsubsection{Momentum}
+
+\begin{algorithmic}
+\State $\boldsymbol v \leftarrow \alpha \boldsymbol v - \epsilon \nabla_{\boldsymbol \theta} \frac{1}{m} \sum_i L(f(\boldsymbol x^{(i)}; \boldsymbol \theta), y^{(i)})$
+\State $\boldsymbol \theta \leftarrow \boldsymbol \theta + \boldsymbol v$
+\end{algorithmic}
+
+\subsubsection{Nesterov momentum}
+
+\begin{algorithmic}
+\State $\boldsymbol v \leftarrow \alpha \boldsymbol v - \epsilon \nabla_{\boldsymbol \theta} \frac{1}{m} \sum_i L(f(\boldsymbol x^{(i)}; \boldsymbol \theta + \alpha \boldsymbol v), y^{(i)})$
+\State $\boldsymbol \theta \leftarrow \boldsymbol \theta + \boldsymbol v$
+\end{algorithmic}
+
+\subsubsection{Adagrad}
+
+\begin{algorithmic}
+\State $\boldsymbol r \leftarrow \boldsymbol r + \boldsymbol g^2$ \textit{accumulate squared root}
+\State $\Delta \boldsymbol \theta \leftarrow - \frac{\epsilon}{\delta + \sqrt{\boldsymbol r}} \cdot \boldsymbol g$
+\end{algorithmic}
+
 
 \subsection{Jacobian matrix}
 
@@ -301,13 +325,18 @@ Can be unrolled into a bipartite undirected graphical model.
 
 \subsection{Variational Auto Encoders}
 
-
-\vspace{32 mm}
-
+Lower bound:
+\begin{align*}
+\mathcal{L}(q) &= \mathbb{E}_{\boldsymbol z \sim q(\boldsymbol z \lvert \boldsymbol x)} \log p_{\text{model}} (\boldsymbol x \lvert \boldsymbol z) - D_{KL}\big(q(\boldsymbol z \lvert \boldsymbol x) \lVert p_{\text{model}}(\boldsymbol z) \big)\\
+& \leq \log p_{\text{model}}(\boldsymbol x)
+\end{align*}
+Encoder $q(\boldsymbol z \lvert \boldsymbol x)$, decoder $p_{\text{model}} (\boldsymbol x \lvert \boldsymbol z)$\\
+The lower bound can be optimized using back prop through stochastic operations.
 
 \subsection{Generative Adversarial Networks}
-
-\vspace{32 mm}
+Generator: $\boldsymbol x = g(\boldsymbol z, \boldsymbol \theta^{(g)})$\\
+Discriminator: $d(\boldsymbol x; \boldsymbol \theta^{(g)}) = p(\boldsymbol x \text{ is a real example})$
+The best generator $g^{*} = \arg \min_g \max_d v(g,d)$ is found by minimizing the payoff $v(g, d) = \mathbb{E}_{\boldsymbol x \sim p_{\text{data}}} \log d(x) + \mathbb{E}_{\boldsymbol x \sim p_{\text{model}}} \log (1 - d(x))$
 
 
 \section{Partition function}
